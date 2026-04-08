@@ -12,7 +12,7 @@ TASKS = {
                 "priority": "high",
                 "decision": "escalate",
             },
-            "grader": "grade_action"   # 👈 STRING (IMPORTANT)
+            "graders": [grade_action],   # ✅ THIS LINE FIXES EVERYTHING
         }
     ],
     "medium": [
@@ -26,7 +26,7 @@ TASKS = {
                 "priority": "medium",
                 "decision": "schedule",
             },
-            "grader": "grade_action"
+            "graders": [grade_action],
         }
     ],
     "hard": [
@@ -40,7 +40,7 @@ TASKS = {
                 "priority": "low",
                 "decision": "archive",
             },
-            "grader": "grade_action"
+            "graders": [grade_action],
         }
     ],
 }

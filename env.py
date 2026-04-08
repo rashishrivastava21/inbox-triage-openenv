@@ -33,8 +33,8 @@ class InboxTriageEnv:
         current = self.task_data[self.index]
         gold = current["gold"]
 
-        grader = current.get("grader")
-        reward = grader(action, gold)
+        graders = current.get("graders", [])
+        reward = graders[0](action, gold)
         self.completed.append(current["email_id"])
 
         self.index += 1

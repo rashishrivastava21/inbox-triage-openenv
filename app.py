@@ -1,8 +1,8 @@
-<<<<<<< HEAD
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+import uvicorn
 
 from models import Action
 from env import InboxTriageEnv
@@ -56,8 +56,6 @@ def state():
         return env.state().model_dump()
     except Exception as e:
         return {"error": str(e)}
-=======
-import uvicorn
 
 
 def main():
@@ -66,4 +64,3 @@ def main():
 
 if __name__ == "__main__":
     main()
->>>>>>> f94e4834fdacd0d3485fb6cabbcdd0cb08d8f285

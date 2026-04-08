@@ -10,10 +10,9 @@ def grade_action(action, gold):
     if action.decision == gold["decision"]:
         score += 0.3
 
-   
-    if score <= 0.0:
+    if score <= 0:
         score = 0.01
-    elif score >= 1.0:
+    elif score >= 1:
         score = 0.99
 
     return score

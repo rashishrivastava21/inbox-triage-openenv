@@ -6,13 +6,13 @@ TASKS = {
             "email_id": "e1",
             "sender": "billing@company.com",
             "subject": "Payment failed",
-            "body": "Customer payment did not go through. Please review the billing issue.",
+            "body": "Customer payment did not go through.",
             "gold": {
                 "classification": "billing",
                 "priority": "high",
                 "decision": "escalate",
             },
-            "grader": grade_action,
+            "grader": "grade_action"   # 👈 STRING (IMPORTANT)
         }
     ],
     "medium": [
@@ -20,13 +20,13 @@ TASKS = {
             "email_id": "e2",
             "sender": "calendar@company.com",
             "subject": "Team meeting tomorrow",
-            "body": "Please confirm your availability for tomorrow's team meeting.",
+            "body": "Please confirm your availability.",
             "gold": {
                 "classification": "meeting",
                 "priority": "medium",
                 "decision": "schedule",
             },
-            "grader": grade_action,
+            "grader": "grade_action"
         }
     ],
     "hard": [
@@ -34,13 +34,13 @@ TASKS = {
             "email_id": "e3",
             "sender": "promo@randomsite.com",
             "subject": "Win a free phone now!!!",
-            "body": "Click here right now to claim your free reward and prize.",
+            "body": "Click here now.",
             "gold": {
                 "classification": "spam",
                 "priority": "low",
                 "decision": "archive",
             },
-            "grader": grade_action,
+            "grader": "grade_action"
         }
     ],
 }

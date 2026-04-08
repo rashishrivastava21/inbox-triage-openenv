@@ -1,7 +1,8 @@
 import json
 import os
+import urllib.error
+import urllib.request
 
-import requests
 from openai import OpenAI
 
 API_BASE_URL = os.getenv("API_BASE_URL")
@@ -41,6 +42,28 @@ def get_client():
         api_key=API_KEY,
         base_url=API_BASE_URL,
     )
+
+
+def post_json(url, payload, timeout=30):
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            body = response.read().decode("utf-8")
+            return json.loads(body)
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"HTTP {e.code} calling {url}: {body}") from e
+    except urllib.error.URLError as e:
+        raise RuntimeError(f"Failed to reach {url}: {e.reason}") from e
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"Invalid JSON response from {url}") from e
 
 
 def parse_action(raw, fallback_email_id):
@@ -112,28 +135,23 @@ def main():
     log_start(TASK_NAME, "inbox-triage-openenv", MODEL_NAME)
 
     try:
-        reset_res = requests.post(
+        reset_json = post_json(
             f"{ENV_URL}/reset",
-            json={"task_name": TASK_NAME},
+            {"task_name": TASK_NAME},
             timeout=30,
         )
-        reset_res.raise_for_status()
 
-        reset_json = reset_res.json()
         obs = reset_json["observation"]
         current_email = obs["current_email"]
 
         raw = ask_model(current_email)
         action = parse_action(raw, current_email["email_id"])
 
-        step_res = requests.post(
+        result = post_json(
             f"{ENV_URL}/step",
-            json=action,
+            action,
             timeout=30,
         )
-        step_res.raise_for_status()
-
-        result = step_res.json()
 
         if "error" in result and result["error"]:
             raise RuntimeError(result["error"])
